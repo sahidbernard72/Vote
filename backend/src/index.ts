@@ -600,8 +600,11 @@ const app = new Elysia()
         };
       })
   )
-  .listen(process.env.PORT || 3000);
+  .listen({
+    port: Number(process.env.PORT) || 3000,
+    hostname: "0.0.0.0",
+  });
 
 console.log(
-  `🚀 Elysia server berjalan di http://${app.server?.hostname}:${app.server?.port}`
+  `🚀 Elysia server berjalan di http://0.0.0.0:${Number(process.env.PORT) || 3000}`
 );
