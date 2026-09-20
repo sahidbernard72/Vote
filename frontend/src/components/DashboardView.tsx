@@ -104,6 +104,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     .sort((a, b) => b.totalDpt - a.totalDpt)
     .slice(0, 5);
 
+  // Sorted kecamatan by totalDpt descending so chart matches Top 5 leaderboard order
+  const sortedKecamatanList = singleKab
+    ? [...singleKab.kecamatanList].sort((a, b) => b.totalDpt - a.totalDpt)
+    : [];
+
   return (
     <div>
       {/* Top Header & Breadcrumb Bar */}
@@ -354,13 +359,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       Distribusi DPT 10 Kecamatan di {singleKab.namaKabupaten}
                     </div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Klik batang grafik untuk rincian desa
+                      (Terurut DPT Terbanyak) &bull; Klik batang untuk rincian desa
                     </span>
                   </div>
                   <div className="chart-container">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
-                        data={singleKab.kecamatanList}
+                        data={sortedKecamatanList}
                         margin={{ top: 20, right: 20, left: 10, bottom: 25 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -1202,7 +1207,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <div className="chart-container">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
-                        data={activeKab.kecamatanList}
+                        data={[...activeKab.kecamatanList].sort((a, b) => b.totalDpt - a.totalDpt)}
                         margin={{ top: 15, right: 20, left: 10, bottom: 25 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />

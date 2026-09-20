@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center' }}>
+        <div className="navbar-status-actions">
           {/* Theme Switcher Button */}
           <button
             onClick={toggleTheme}
