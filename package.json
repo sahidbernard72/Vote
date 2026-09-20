@@ -1,0 +1,11 @@
+{
+  "name": "dpt-project-root",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && bun run dev",
+    "dev:frontend": "cd frontend && bun run dev",
+    "build:frontend": "cd frontend && bun run build",
+    "db:push": "cd backend && bun run db:push",
+    "db:studio": "cd backend && bun run db:studio"
+  }
+}
