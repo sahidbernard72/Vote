@@ -532,20 +532,90 @@ label {
 }
 
 @media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0.75rem;
+  }
+  .navbar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+  .brand-section {
+    justify-content: center;
+    text-align: center;
+  }
+  .nav-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.25rem;
+  }
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-tab-btn {
+    padding: 0.45rem 0.95rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .metric-card {
+    padding: 1rem;
+  }
+  .metric-info .value {
+    font-size: 1.6rem;
+  }
+  .metric-icon-box {
+    width: 38px;
+    height: 38px;
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .chart-container {
+    height: 270px;
+  }
+  .geo-map-container {
+    height: 360px;
+  }
+  .form-container {
+    padding: 1.25rem;
+  }
   .form-grid {
     grid-template-columns: 1fr;
   }
   .form-group.full-width {
     grid-column: span 1;
   }
-  .charts-grid {
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0.75rem 0.5rem;
+  }
+  .metrics-grid {
     grid-template-columns: 1fr;
   }
-  .navbar-inner {
-    flex-direction: column;
-    align-items: stretch;
+  .brand-text h1 {
+    font-size: 1.05rem;
   }
-  .nav-tabs {
-    justify-content: center;
+  .brand-text span {
+    font-size: 0.65rem;
+  }
+  .geo-map-container {
+    height: 300px;
+  }
+  .chart-container {
+    height: 240px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 0.7rem 1rem;
   }
 }
