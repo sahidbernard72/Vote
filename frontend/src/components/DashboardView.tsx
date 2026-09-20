@@ -592,7 +592,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* Kecamatan KPI Cards */}
-              <div className="metrics-grid" style={{ marginBottom: '1.5rem', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+              <div className="metrics-grid-3">
                 <div className="glass-panel metric-card">
                   <div className="metric-info">
                     <h3>Total DPT Kecamatan</h3>
@@ -637,13 +637,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* Desa Table */}
-              <div className="glass-panel" style={{ padding: '1.75rem' }}>
+              <div className="glass-panel drilldown-table-card">
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     marginBottom: '1.25rem',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem',
                   }}
                 >
                   <div>
@@ -656,7 +658,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </p>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem', flexWrap: 'wrap' }}>
                     <span
                       className="badge"
                       style={{
@@ -684,22 +686,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <table className="data-table">
                     <thead>
                       <tr>
-                        <th>ID Desa</th>
-                        <th>Nama Desa / Kelurahan</th>
-                        <th>Status Nilai</th>
+                        <th style={{ width: '35px' }}>#</th>
+                        <th>Desa / Kelurahan</th>
+                        <th style={{ textAlign: 'center' }}>Status</th>
                         <th style={{ textAlign: 'right' }}>Jumlah DPT</th>
-                        <th style={{ textAlign: 'right' }}>Jumlah TPS</th>
-                        <th style={{ textAlign: 'center' }}>Aksi</th>
+                        <th style={{ textAlign: 'right' }}>TPS</th>
+                        <th style={{ textAlign: 'center', width: '50px' }}>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {activeKec.desasList.map((d) => {
+                      {activeKec.desasList.map((d, idx) => {
                         const isNull = d.jumlahDpt === null || d.jumlahDpt === undefined;
                         return (
                           <tr key={d.desaId}>
-                            <td style={{ fontFamily: 'monospace', color: 'var(--text-muted)' }}>{d.desaId}</td>
-                            <td style={{ fontWeight: 700, fontSize: '0.95rem' }}>Desa/Kel. {d.namaDesa}</td>
+                            <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{idx + 1}</td>
                             <td>
+                              <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+                                {d.namaDesa}
+                              </div>
+                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+                                {d.desaId}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: 'center' }}>
                               {isNull ? (
                                 <span
                                   className="badge"
@@ -707,12 +716,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: 'rgba(217, 119, 6, 0.1)',
                                     color: '#b45309',
                                     border: '1px solid rgba(217, 119, 6, 0.3)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.3rem',
+                                    fontSize: '0.72rem',
+                                    padding: '0.2rem 0.5rem',
                                   }}
                                 >
-                                  <AlertTriangle size={12} /> Data Belum Masuk
+                                  <AlertTriangle size={11} style={{ marginRight: '3px' }} /> Belum
                                 </span>
                               ) : (
                                 <span
@@ -721,31 +729,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: 'rgba(5, 150, 105, 0.1)',
                                     color: '#047857',
                                     border: '1px solid rgba(5, 150, 105, 0.3)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.3rem',
+                                    fontSize: '0.72rem',
+                                    padding: '0.2rem 0.5rem',
                                   }}
                                 >
-                                  <CheckCircle size={12} /> Terisi Angka Riil
+                                  <CheckCircle size={11} style={{ marginRight: '3px' }} /> Riil
                                 </span>
                               )}
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                            <td style={{ textAlign: 'right', fontWeight: 800, color: 'var(--accent-primary)', whiteSpace: 'nowrap' }}>
                               {isNull ? (
                                 <span style={{ color: 'var(--text-muted)' }}>-</span>
                               ) : (
-                                <span style={{ color: 'var(--accent-primary)' }}>
-                                  {d.jumlahDpt?.toLocaleString('id-ID')}
-                                </span>
+                                d.jumlahDpt?.toLocaleString('id-ID')
                               )}
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                            <td style={{ textAlign: 'right', fontWeight: 600, color: 'var(--accent-secondary)' }}>
                               {isNull ? (
                                 <span style={{ color: 'var(--text-muted)' }}>-</span>
                               ) : (
-                                <span style={{ color: 'var(--accent-secondary)' }}>
-                                  {d.jumlahTps?.toLocaleString('id-ID')}
-                                </span>
+                                d.jumlahTps?.toLocaleString('id-ID')
                               )}
                             </td>
                             <td style={{ textAlign: 'center' }}>
@@ -756,18 +759,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: isNull ? 'rgba(217, 119, 6, 0.1)' : 'rgba(79, 70, 229, 0.1)',
                                     border: `1px solid ${isNull ? 'rgba(217, 119, 6, 0.3)' : 'rgba(79, 70, 229, 0.3)'}`,
                                     color: isNull ? '#b45309' : 'var(--accent-primary)',
-                                    padding: '0.35rem 0.75rem',
+                                    padding: '0.35rem 0.6rem',
                                     borderRadius: '6px',
                                     cursor: 'pointer',
                                     fontSize: '0.75rem',
                                     fontWeight: 600,
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    gap: '0.3rem',
+                                    justifyContent: 'center',
                                   }}
+                                  title={isNull ? 'Input data desa ini' : 'Edit data desa ini'}
                                 >
-                                  <ExternalLink size={12} />
-                                  {isNull ? 'Input Sekarang' : 'Edit Nilai'}
+                                  <ExternalLink size={13} />
                                 </button>
                               )}
                             </td>
@@ -1307,13 +1310,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '1.75rem' }}>
+              <div className="glass-panel drilldown-table-card">
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     marginBottom: '1.25rem',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem',
                   }}
                 >
                   <div>
@@ -1326,7 +1331,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </p>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem', flexWrap: 'wrap' }}>
                     <span
                       className="badge"
                       style={{
@@ -1354,22 +1359,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <table className="data-table">
                     <thead>
                       <tr>
-                        <th>ID Desa</th>
-                        <th>Nama Desa / Kelurahan</th>
-                        <th>Status Nilai</th>
+                        <th style={{ width: '35px' }}>#</th>
+                        <th>Desa / Kelurahan</th>
+                        <th style={{ textAlign: 'center' }}>Status</th>
                         <th style={{ textAlign: 'right' }}>Jumlah DPT</th>
-                        <th style={{ textAlign: 'right' }}>Jumlah TPS</th>
-                        <th style={{ textAlign: 'center' }}>Aksi</th>
+                        <th style={{ textAlign: 'right' }}>TPS</th>
+                        <th style={{ textAlign: 'center', width: '50px' }}>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {activeKec.desasList.map((d) => {
+                      {activeKec.desasList.map((d, idx) => {
                         const isNull = d.jumlahDpt === null || d.jumlahDpt === undefined;
                         return (
                           <tr key={d.desaId}>
-                            <td style={{ fontFamily: 'monospace', color: 'var(--text-muted)' }}>{d.desaId}</td>
-                            <td style={{ fontWeight: 700, fontSize: '0.95rem' }}>Desa/Kel. {d.namaDesa}</td>
+                            <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{idx + 1}</td>
                             <td>
+                              <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+                                {d.namaDesa}
+                              </div>
+                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+                                {d.desaId}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: 'center' }}>
                               {isNull ? (
                                 <span
                                   className="badge"
@@ -1377,12 +1389,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: 'rgba(217, 119, 6, 0.1)',
                                     color: '#b45309',
                                     border: '1px solid rgba(217, 119, 6, 0.3)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.3rem',
+                                    fontSize: '0.72rem',
+                                    padding: '0.2rem 0.5rem',
                                   }}
                                 >
-                                  <AlertTriangle size={12} /> Data Belum Masuk
+                                  <AlertTriangle size={11} style={{ marginRight: '3px' }} /> Belum
                                 </span>
                               ) : (
                                 <span
@@ -1391,31 +1402,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: 'rgba(5, 150, 105, 0.1)',
                                     color: '#047857',
                                     border: '1px solid rgba(5, 150, 105, 0.3)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.3rem',
+                                    fontSize: '0.72rem',
+                                    padding: '0.2rem 0.5rem',
                                   }}
                                 >
-                                  <CheckCircle size={12} /> Terisi Angka Riil
+                                  <CheckCircle size={11} style={{ marginRight: '3px' }} /> Riil
                                 </span>
                               )}
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                            <td style={{ textAlign: 'right', fontWeight: 800, color: 'var(--accent-primary)', whiteSpace: 'nowrap' }}>
                               {isNull ? (
                                 <span style={{ color: 'var(--text-muted)' }}>-</span>
                               ) : (
-                                <span style={{ color: 'var(--accent-primary)' }}>
-                                  {d.jumlahDpt?.toLocaleString('id-ID')}
-                                </span>
+                                d.jumlahDpt?.toLocaleString('id-ID')
                               )}
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                            <td style={{ textAlign: 'right', fontWeight: 600, color: 'var(--accent-secondary)' }}>
                               {isNull ? (
                                 <span style={{ color: 'var(--text-muted)' }}>-</span>
                               ) : (
-                                <span style={{ color: 'var(--accent-secondary)' }}>
-                                  {d.jumlahTps?.toLocaleString('id-ID')}
-                                </span>
+                                d.jumlahTps?.toLocaleString('id-ID')
                               )}
                             </td>
                             <td style={{ textAlign: 'center' }}>
@@ -1426,18 +1432,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                                     background: isNull ? 'rgba(217, 119, 6, 0.1)' : 'rgba(79, 70, 229, 0.1)',
                                     border: `1px solid ${isNull ? 'rgba(217, 119, 6, 0.3)' : 'rgba(79, 70, 229, 0.3)'}`,
                                     color: isNull ? '#b45309' : 'var(--accent-primary)',
-                                    padding: '0.35rem 0.75rem',
+                                    padding: '0.35rem 0.6rem',
                                     borderRadius: '6px',
                                     cursor: 'pointer',
                                     fontSize: '0.75rem',
                                     fontWeight: 600,
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    gap: '0.3rem',
+                                    justifyContent: 'center',
                                   }}
+                                  title={isNull ? 'Input data desa ini' : 'Edit data desa ini'}
                                 >
-                                  <ExternalLink size={12} />
-                                  {isNull ? 'Input Sekarang' : 'Edit Nilai'}
+                                  <ExternalLink size={13} />
                                 </button>
                               )}
                             </td>
