@@ -366,19 +366,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={sortedKecamatanList}
-                        margin={{ top: 20, right: 20, left: 10, bottom: 25 }}
+                        margin={{ top: 15, right: 10, left: -15, bottom: 40 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                         <XAxis
                           dataKey="namaKecamatan"
                           stroke="#64748b"
-                          tick={{ fill: '#334155', fontSize: 11, fontWeight: 600 }}
+                          tick={{ fill: '#334155', fontSize: 10, fontWeight: 600 }}
                           interval={0}
-                          angle={-25}
+                          angle={-35}
                           textAnchor="end"
-                          height={50}
+                          height={45}
                         />
-                        <YAxis stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} />
+                        <YAxis
+                          stroke="#64748b"
+                          tick={{ fill: '#64748b', fontSize: 10 }}
+                          width={38}
+                          tickFormatter={(val) => (val >= 1000 ? `${val / 1000}k` : `${val}`)}
+                        />
                         <Tooltip
                           contentStyle={{
                             backgroundColor: '#ffffff',
@@ -386,6 +391,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             borderRadius: '8px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                             color: '#0f172a',
+                            fontSize: '0.8rem',
                           }}
                           formatter={(val: any) => [val.toLocaleString('id-ID') + ' Pemilih', 'Total DPT']}
                         />
@@ -393,7 +399,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           dataKey="totalDpt"
                           name="Total DPT"
                           fill="var(--accent-primary)"
-                          radius={[6, 6, 0, 0]}
+                          radius={[4, 4, 0, 0]}
                           cursor="pointer"
                           onClick={(entry: any) => setSelectedKecId(entry.kecamatanId)}
                         />
@@ -410,15 +416,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       Top 5 Kecamatan Terpadat di {singleKab.namaKabupaten}
                     </div>
                   </div>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table className="data-table" style={{ fontSize: '0.85rem' }}>
+                  <div className="table-container">
+                    <table className="data-table" style={{ fontSize: '0.82rem' }}>
                       <thead>
                         <tr>
-                          <th>Peringkat</th>
+                          <th style={{ width: '40px' }}>#</th>
                           <th>Kecamatan</th>
                           <th style={{ textAlign: 'right' }}>Total DPT</th>
-                          <th style={{ textAlign: 'right' }}>Total TPS</th>
-                          <th>Kelengkapan</th>
+                          <th style={{ textAlign: 'right' }}>TPS</th>
+                          <th style={{ textAlign: 'center' }}>Kelengkapan</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -433,36 +439,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                               <td style={{ fontWeight: 700, color: idx === 0 ? '#d97706' : 'var(--text-muted)' }}>
                                 #{idx + 1}
                               </td>
-                              <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                              <td style={{ fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
                                 Kec. {kc.namaKecamatan}
                               </td>
-                              <td style={{ textAlign: 'right', fontWeight: 800, color: 'var(--accent-primary)' }}>
+                              <td style={{ textAlign: 'right', fontWeight: 800, color: 'var(--accent-primary)', whiteSpace: 'nowrap' }}>
                                 {kc.totalDpt.toLocaleString('id-ID')}
                               </td>
                               <td style={{ textAlign: 'right', fontWeight: 600, color: 'var(--accent-secondary)' }}>
                                 {kc.totalTps}
                               </td>
-                              <td>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                  <div
-                                    style={{
-                                      width: '45px',
-                                      height: '5px',
-                                      background: 'var(--bg-secondary)',
-                                      borderRadius: '999px',
-                                      overflow: 'hidden',
-                                    }}
-                                  >
-                                    <div
-                                      style={{
-                                        width: `${pct}%`,
-                                        height: '100%',
-                                        background: pct === 100 ? '#059669' : '#4f46e5',
-                                      }}
-                                    />
-                                  </div>
-                                  <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{pct}%</span>
-                                </div>
+                              <td style={{ textAlign: 'center' }}>
+                                <span
+                                  className="badge"
+                                  style={{
+                                    background: pct === 100 ? 'rgba(5, 150, 105, 0.12)' : 'rgba(217, 119, 6, 0.12)',
+                                    color: pct === 100 ? '#059669' : '#d97706',
+                                    fontSize: '0.72rem',
+                                    padding: '0.2rem 0.55rem',
+                                  }}
+                                >
+                                  {pct}%
+                                </span>
                               </td>
                             </tr>
                           );

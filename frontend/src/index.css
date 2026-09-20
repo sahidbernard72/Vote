@@ -443,9 +443,11 @@ h1, h2, h3, h4, h5, h6 {
 /* Charts Grid */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .chart-card {
@@ -454,6 +456,11 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   gap: 1rem;
   background: var(--bg-card);
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .chart-header {
@@ -462,6 +469,8 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
   border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .chart-title {
@@ -476,6 +485,9 @@ h1, h2, h3, h4, h5, h6 {
 .chart-container {
   height: 320px;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  position: relative;
 }
 
 /* Map Container */
@@ -588,9 +600,13 @@ label {
 
 /* Tables */
 .table-container {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  display: block;
 }
 
 .data-table {
@@ -737,11 +753,22 @@ label {
     height: 38px;
   }
   .charts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  .chart-card {
+    padding: 1rem 0.75rem;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
   }
   .chart-container {
     height: 270px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
   .geo-map-container {
     height: 360px;
