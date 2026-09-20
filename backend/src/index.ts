@@ -49,17 +49,35 @@ async function autoSeedDatabase() {
         await db.insert(desa).values(d).onDuplicateKeyUpdate({ set: { nama: d.nama } });
       }
       for (const p of initialPeriode) {
-        await db.insert(periodeRekap).values(p).onDuplicateKeyUpdate({ set: { namaEvent: p.namaEvent } });
+        await db.insert(periodeRekap).values({
+          id: p.id,
+          namaEvent: p.namaEvent,
+          tahun: p.tahun,
+          keterangan: p.keterangan,
+          createdAt: new Date(p.createdAt),
+        }).onDuplicateKeyUpdate({ set: { namaEvent: p.namaEvent } });
       }
-      for (const r of initialRekapDesa) {
-        await db.insert(rekapDesa).values(r).onDuplicateKeyUpdate({
-          set: {
-            jumlahDpt: r.jumlahDpt,
-            jumlahTps: r.jumlahTps,
-          },
-        });
+      console.log("✅ Master wilayah selesai disemai!");
+    }
+
+    // Seed rekap_desa jika masih kosong
+    const existingRekap = await db.select().from(rekapDesa);
+    if (existingRekap.length === 0) {
+      console.log(`🌱 Seeding ${initialRekapDesa.length} data rekapitulasi desa dari Excel ke MySQL...`);
+      for (let i = 0; i < initialRekapDesa.length; i += 50) {
+        const chunk = initialRekapDesa.slice(i, i + 50).map((r) => ({
+          periodeId: r.periodeId,
+          desaId: r.desaId,
+          jumlahDpt: r.jumlahDpt,
+          jumlahTps: r.jumlahTps,
+          createdAt: new Date(r.createdAt || Date.now()),
+          updatedAt: new Date(r.updatedAt || Date.now()),
+        }));
+        await db.insert(rekapDesa).values(chunk);
       }
-      console.log("✅ Auto-seeding selesai!");
+      console.log("✅ Seeding rekapitulasi desa selesai!");
+    } else {
+      console.log(`ℹ️ Tabel rekap_desa sudah memiliki ${existingRekap.length} baris data.`);
     }
   } catch (err) {
     console.error("Auto-seed error:", err);
