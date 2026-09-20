@@ -107,33 +107,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div>
       {/* Top Header & Breadcrumb Bar */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <div>
-          <h2 style={{ fontSize: '1.85rem', fontWeight: 800 }}>
+      <div className="dashboard-header">
+        <div className="dashboard-header-title">
+          <h2>
             {isSingleKab
               ? `Visualisasi & Analisis Wilayah ${singleKab?.namaKabupaten}`
               : 'Visualisasi & Analisis Wilayah'}
           </h2>
 
           {/* Breadcrumbs Navigation */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              marginTop: '0.35rem',
-              fontSize: '0.875rem',
-            }}
-          >
+          <div className="dashboard-header-breadcrumb">
             {isSingleKab ? (
               <>
                 <button
@@ -210,7 +193,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Periode selector & refresh */}
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div className="dashboard-header-actions">
           <div
             style={{
               display: 'flex',
@@ -349,11 +332,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* 2. Interactive Geo Heatmap Component */}
-              <GeoHeatmap
-                stats={stats}
-                onSelectKabupaten={() => {}}
-                onSelectKecamatan={(_, kecId) => setSelectedKecId(kecId)}
-              />
+              <div className="map-section">
+                <div className="map-section-title">
+                  <MapPin size={18} color="var(--accent-primary)" />
+                  Peta Distribusi Wilayah {singleKab.namaKabupaten}
+                </div>
+                <GeoHeatmap
+                  stats={stats}
+                  onSelectKabupaten={() => {}}
+                  onSelectKecamatan={(_, kecId) => setSelectedKecId(kecId)}
+                />
+              </div>
 
               {/* 3. Charts & Leaderboard Row */}
               <div className="charts-grid" style={{ marginBottom: '2rem' }}>
@@ -480,23 +469,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* 4. Grid 10 Kecamatan Bulukumba */}
-              <div style={{ marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.35rem' }}>
+              <div className="section-header">
+                <h3>
                   10 Kecamatan di {singleKab.namaKabupaten}
                 </h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+                <p>
                   Pilih kecamatan untuk membuka rincian status riil / NULL pada seluruh desa/kelurahan.
                 </p>
               </div>
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                  gap: '1rem',
-                  marginBottom: '2rem',
-                }}
-              >
+              <div className="kecamatan-grid">
                 {singleKab.kecamatanList.map((kc) => {
                   const pct = kc.desaCount > 0 ? Math.round((kc.desaTerlapor / kc.desaCount) * 100) : 0;
                   return (
@@ -590,17 +572,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* LEVEL 2: DRILL-DOWN KECAMATAN (DETAIL STATUS DESA DI BULUKUMBA) */}
           {selectedKecId && activeKec && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div className="drilldown-header">
                 <button
                   onClick={() => setSelectedKecId(null)}
-                  className="btn-primary"
-                  style={{
-                    padding: '0.45rem 0.85rem',
-                    fontSize: '0.85rem',
-                    background: 'var(--bg-card)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-subtle)',
-                  }}
+                  className="back-btn"
                 >
                   <ArrowLeft size={15} /> Kembali ke Ringkasan {singleKab.namaKabupaten}
                 </button>
@@ -615,7 +590,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* Kecamatan KPI Cards */}
-              <div className="metrics-grid" style={{ marginBottom: '1.5rem' }}>
+              <div className="metrics-grid" style={{ marginBottom: '1.5rem', gridTemplateColumns: 'repeat(3, 1fr)' }}>
                 <div className="glass-panel metric-card">
                   <div className="metric-info">
                     <h3>Total DPT Kecamatan</h3>
@@ -902,33 +877,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               {/* 2. Interactive Geo Heatmap Component */}
-              <GeoHeatmap
-                stats={stats}
-                onSelectKabupaten={(kabId) => setSelectedKabId(kabId)}
-                onSelectKecamatan={(kabId, kecId) => {
-                  setSelectedKabId(kabId);
-                  setSelectedKecId(kecId);
-                }}
-              />
-
-              {/* 3. Hero Kabupaten Comparative Cards */}
-              <div style={{ marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.35rem' }}>
-                  Komparasi Antar Kabupaten
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                  Pilih kartu kabupaten untuk membuka rincian per kecamatan dan desa.
-                </p>
+              <div className="map-section">
+                <div className="map-section-title">
+                  <MapPin size={18} color="var(--accent-primary)" />
+                  Peta Distribusi 3 Kabupaten
+                </div>
+                <GeoHeatmap
+                  stats={stats}
+                  onSelectKabupaten={(kabId) => setSelectedKabId(kabId)}
+                  onSelectKecamatan={(kabId, kecId) => {
+                    setSelectedKabId(kabId);
+                    setSelectedKecId(kecId);
+                  }}
+                />
               </div>
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                  gap: '1.25rem',
-                  marginBottom: '2rem',
-                }}
-              >
+              {/* 3. Hero Kabupaten Comparative Cards */}
+              <div className="section-header">
+                <h3>Komparasi Antar Kabupaten</h3>
+                <p>Pilih kartu kabupaten untuk membuka rincian per kecamatan dan desa.</p>
+              </div>
+
+              <div className="kecamatan-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
                 {stats.byKabupaten.map((kab) => {
                   const accent = KABUPATEN_COLORS[kab.kabupatenId] || 'var(--accent-primary)';
                   return (
@@ -1163,17 +1133,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* LEVEL 2: DRILL-DOWN KABUPATEN */}
           {selectedKabId && !selectedKecId && activeKab && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div className="drilldown-header">
                 <button
                   onClick={() => setSelectedKabId(null)}
-                  className="btn-primary"
-                  style={{
-                    padding: '0.45rem 0.85rem',
-                    fontSize: '0.85rem',
-                    background: 'var(--bg-card)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-subtle)',
-                  }}
+                  className="back-btn"
                 >
                   <ArrowLeft size={15} /> Kembali ke Komparasi
                 </button>
@@ -1187,7 +1150,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </div>
               </div>
 
-              <div className="metrics-grid" style={{ marginBottom: '1.5rem' }}>
+              <div className="metrics-grid" style={{ marginBottom: '1.5rem', gridTemplateColumns: 'repeat(3, 1fr)' }}>
                 <div className="glass-panel metric-card">
                   <div className="metric-info">
                     <h3>Total DPT {activeKab.namaKabupaten}</h3>
@@ -1325,17 +1288,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* LEVEL 3: DRILL-DOWN KECAMATAN MULTI KAB */}
           {selectedKabId && selectedKecId && activeKab && activeKec && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div className="drilldown-header">
                 <button
                   onClick={() => setSelectedKecId(null)}
-                  className="btn-primary"
-                  style={{
-                    padding: '0.45rem 0.85rem',
-                    fontSize: '0.85rem',
-                    background: 'var(--bg-card)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-subtle)',
-                  }}
+                  className="back-btn"
                 >
                   <ArrowLeft size={15} /> Kembali ke {activeKab.namaKabupaten}
                 </button>
